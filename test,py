@@ -1,0 +1,36 @@
+import itertools
+
+def tsp_brute_force(graph, start):
+    
+    n = len(graph)
+    cities = list(range(n))
+    permutations = itertools.permutations(cities)
+
+    
+    min_distance = float('inf')
+    optimal_path = None
+
+   
+    for path in permutations:
+        if path[0] == start:
+            distance = 0
+            for i in range(n - 1):
+                distance += graph[path[i]][path[i + 1]]
+            distance += graph[path[-1]][path[0]]  
+            if distance < min_distance:
+                min_distance = distance
+                optimal_path = path
+
+    return min_distance, optimal_path
+
+
+graph = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+start_city = 0
+min_distance, optimal_path = tsp_brute_force(graph, start_city)
+print("Minimum distance:", min_distance)
+print("Optimal path:", optimal_path)
