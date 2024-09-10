@@ -36,55 +36,168 @@ graph TD
 - InfluxDB credentials
 - Grafana credentials
 
-## Installation
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/your-username/ethereum-deposit-tracker.git
-   cd ethereum-deposit-tracker
-   ```
+# Ethereum Deposit Tracker Setup and Installation
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+This guide will walk you through setting up and running the Ethereum Deposit Tracker project. Please follow the steps carefully to ensure everything is properly configured.
 
-3. Set up environment variables:
-   Create a `.env` file in the root directory and add the following:
-   ```
-   ALCHEMY_API_KEY=your_alchemy_api_key
-   BEACON_CONTRACT_ADDRESS=0x00000000219ab540356cBB839Cbe05303d7705Fa
-   RABBITMQ_URL=amqp://localhost
-   INFLUXDB_URL=http://localhost:8086
-   INFLUXDB_TOKEN=your_influxdb_token
-   INFLUXDB_ORG=your_org
-   INFLUXDB_BUCKET=your_bucket
-   TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-   TELEGRAM_CHAT_ID=your_telegram_chat_id
-   ```
+## 1. Clone the Repository
 
-4. Start the Docker containers:
-   ```
-   docker-compose up -d
-   ```
-    ```
-   docker ps
-   ```
-     ```
-   docker network inspect influxdb_nk
+```bash
+git clone <repository-url>
+```
 
-   ```
+## 2. Run Docker Compose for Grafana and InfluxDB
 
-5. Run the main service:
-   ```
-   node index.js
-   ```
+**Note:** You may need to update the `.env` configuration files for Grafana and InfluxDB. Ensure these settings are also updated in the backend `.env` file. Follow the existing configuration format for consistency.
 
-6. Run the workers:
-   ```
-   node influxdb_worker.js
-   node telegram_worker.js
-   ```
+Navigate to the `grafana_influxdb` folder in your project directory and run the following command:
+
+```bash
+# Command to run Docker Compose
+```
+
+You should now be able to see:
+
+- **Grafana UI** at [http://localhost:3000/](http://localhost:3000/)
+  - Login with the credentials:
+    - Username: `admin`
+    - Password: *password from Grafana.env file*
+
+- **InfluxDB UI** at [http://localhost:8086/](http://localhost:8086/)
+  - Fill in the credentials by looking at the `influxdb.env` file located in the `grafana_influxdb/` folder.
+
+**Skip this step if you can access both services.**
+
+### If you are unable to access these services:
+
+1. Check whether the containers are running using the following command:
+
+```bash
+# Command to check running containers
+```
+
+2. If you see nothing, create the network `influxdb_nk` with the following command:
+
+```bash
+# Command to create the network
+```
+
+3. Inspect the network:
+
+```bash
+# Command to inspect the network
+```
+
+This command will output JSON data that includes details about the network, including the containers connected to it. Look for the `Containers` section in the output.
+
+### You can also use Docker Desktop to check container status.
+
+**Note:** Make sure virtualization is enabled on your machine to run Docker Engine.
+
+## 3. Run Docker Compose for RabbitMQ
+
+You should be able to see RabbitMQ UI at [http://localhost:15672/](http://localhost:15672/)
+
+- Login with the credentials:
+  - Username: `guest`
+  - Password: `guest`
+
+## 4. Backend Setup
+
+Navigate to the `/backend` folder and follow these steps:
+
+### Install dependencies:
+
+```bash
+# Command to install dependencies
+```
+
+### Set up environment variables
+
+Create a `.env` file in the root directory and add the following:
+
+- **Alchemy API key** from the Alchemy site.
+- **InfluxDB Token** can be found at [http://localhost:8086/](http://localhost:8086/):
+  - Navigate to **Data -> Token** and copy the Admin user token.
+- **Telegram API key** from Telegram BotFather.
+
+### To get the Telegram chat ID
+
+1. Go to `telegram_worker.js`.
+2. Uncomment the following code and run it inside the `/backend` folder:
+
+```bash
+# Command to get chat ID
+```
+
+3. After getting the chat ID, comment the code back.
+4. Update the `ChatId` in the `.env` file.
+
+### Remaining environment variables
+
+```bash
+INFLUXDB_ORG=ethereum_org
+INFLUXDB_BUCKET=ethereum_deposits
+```
+
+Your final `.env` in the `/backend` folder should look like this:
+
+```bash
+# Example .env file
+```
+
+## 5. Run the Application
+
+Open 3 terminals in the `/backend` folder and run the following commands:
+
+- **Terminal 1:**
+
+```bash
+# Command for Terminal 1
+```
+
+- **Terminal 2:**
+
+```bash
+# Command for Terminal 2
+```
+
+- **Terminal 3:**
+
+```bash
+# Command for Terminal 3
+```
+
+## 6. Check Logs
+
+You can also check the logs in the `logs/` folder.
+
+## Expected Outputs
+
+- **Terminal 1:**
+
+```bash
+# Example output for Terminal 1
+```
+
+- **Terminal 2:**
+
+```bash
+# Example output for Terminal 2
+```
+
+- **Terminal 3:**
+
+```bash
+# Example output for Terminal 3
+```
+
+---
+
+### Screenshots
+*(Insert screenshots here)*
+
 
 ## Usage
 
