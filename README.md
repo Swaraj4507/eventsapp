@@ -184,6 +184,7 @@ TELEGRAM_CHAT_ID=chat_id
 
 ```
 
+
 ## 5. Run the Application
 
 Open 3 terminals in the `/backend` folder and run the following commands:
@@ -238,6 +239,45 @@ PS D:\eth-deposit-tracker\backend> node telegram_worker.js
 ```
 
 ---
+## Setting up InfluxDB Data Source in Grafana
+
+Follow these steps to set up the InfluxDB data source in Grafana.
+Go through this if required[https://youtu.be/Jszd7zrl-_U?si=WQhMbHZXDj5OaBgA]
+
+### 1. Access Grafana UI
+- Open your browser and go to [http://localhost:3000](http://localhost:3000).
+- Log in with the following credentials:
+  - **Username:** `admin`
+  - **Password:** (from the `Grafana.env` file)
+
+### 2. Add a New Data Source
+- On the Grafana home page, click the **gear icon (⚙️)** on the left sidebar to open **Configuration**.
+- Select **Data Sources** from the menu.
+
+### 3. Choose the Data Source Type
+- Click the **Add data source** button.
+- Scroll down and choose **InfluxDB** from the list of available data sources.
+
+### 4. Configure InfluxDB Data Source
+- In the **HTTP** section, enter the following details:
+  - **URL:** `http://influxdb:8086` or `http://influxdb:8086`.
+- In the **Auth** section, leave as default unless your InfluxDB requires additional authentication.
+- In the **InfluxDB Details** section, fill in:
+  - **Database:** Your InfluxDB database name (e.g., `ethereum_deposits`).
+  - **User:**  The username for your InfluxDB.
+  - **Password:** The password for your InfluxDB.
+
+### 5. Set Up Access Token (if needed)
+- If using tokens, provide an **InfluxDB Token**:
+  - Navigate to [http://localhost:8086](http://localhost:8086).
+  - Go to **Data -> Tokens** and copy the token for the Admin user.
+  - Paste this token into the **Auth Token** field in Grafana.
+
+### 6. Save and Test
+- Click **Save & Test**.
+- Grafana will attempt to connect to InfluxDB. If successful, you'll see a confirmation message.
+
+Now your InfluxDB data source is set up in Grafana!
 
 ### Screenshots
 *(Insert screenshots here)*
@@ -270,5 +310,28 @@ If you encounter any issues:
 1. Check the logs for each component (main service, workers, and Docker containers)
 2. Ensure all environment variables are correctly set
 3. Verify that all required services (RabbitMQ, InfluxDB, Grafana) are running
+
+## Docker Setup for whole app (optional)
+Run this in root directory 
+
+```
+docker-compose up -d
+```
+Check application logs:
+
+```
+docker-compose logs app
+```
+
+Verify RabbitMQ:
+
+Open a web browser and go to http://localhost:15672
+Log in with the credentials (default: guest/guest)
+Check if the queues influxdb_queue and telegram_queue exist
+
+# Check logs for a specific service
+docker-compose logs influxdb_worker
+docker-compose logs telegram_worker
+
 
 
