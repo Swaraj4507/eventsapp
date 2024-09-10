@@ -67,6 +67,12 @@ graph TD
    ```
    docker-compose up -d
    ```
+    ```
+   docker ps
+   ```
+     ```
+   docker network create influxdb_nk
+   ```
 
 5. Run the main service:
    ```
