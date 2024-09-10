@@ -71,7 +71,8 @@ graph TD
    docker ps
    ```
      ```
-   docker network create influxdb_nk
+   docker network inspect influxdb_nk
+
    ```
 
 5. Run the main service:
