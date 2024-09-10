@@ -44,7 +44,7 @@ This guide will walk you through setting up and running the Ethereum Deposit Tra
 ## 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone "https://github.com/Swaraj4507/eth-deposit-tracker"
 ```
 
 ## 2. Run Docker Compose for Grafana and InfluxDB
@@ -54,7 +54,8 @@ git clone <repository-url>
 Navigate to the `grafana_influxdb` folder in your project directory and run the following command:
 
 ```bash
-# Command to run Docker Compose
+docker-compose up -d
+
 ```
 
 You should now be able to see:
@@ -74,19 +75,19 @@ You should now be able to see:
 1. Check whether the containers are running using the following command:
 
 ```bash
-# Command to check running containers
+docker ps
 ```
 
 2. If you see nothing, create the network `influxdb_nk` with the following command:
 
 ```bash
-# Command to create the network
+docker network create influxdb_nt
 ```
 
 3. Inspect the network:
 
 ```bash
-# Command to inspect the network
+docker network inspect influxdb_nt
 ```
 
 This command will output JSON data that includes details about the network, including the containers connected to it. Look for the `Containers` section in the output.
@@ -110,12 +111,23 @@ Navigate to the `/backend` folder and follow these steps:
 ### Install dependencies:
 
 ```bash
-# Command to install dependencies
+npm install
 ```
 
 ### Set up environment variables
 
 Create a `.env` file in the root directory and add the following:
+ ```
+   ALCHEMY_API_KEY=your_alchemy_api_key
+   BEACON_CONTRACT_ADDRESS=0x00000000219ab540356cBB839Cbe05303d7705Fa
+   RABBITMQ_URL=amqp://localhost
+   INFLUXDB_URL=http://localhost:8086
+   INFLUXDB_TOKEN=your_influxdb_token
+   INFLUXDB_ORG=your_org
+   INFLUXDB_BUCKET=your_bucket
+   TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+   TELEGRAM_CHAT_ID=your_telegram_chat_id
+   ```
 
 - **Alchemy API key** from the Alchemy site.
 - **InfluxDB Token** can be found at [http://localhost:8086/](http://localhost:8086/):
@@ -127,8 +139,24 @@ Create a `.env` file in the root directory and add the following:
 1. Go to `telegram_worker.js`.
 2. Uncomment the following code and run it inside the `/backend` folder:
 
-```bash
-# Command to get chat ID
+```
+
+
+ const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+
+ // When any message is received, log the chatId
+ bot.on('message', (msg) => {
+   const chatId = msg.chat.id;
+  
+  // Send a confirmation message with the chatId
+   bot.sendMessage(chatId, `Your chat ID is: ${chatId}`);
+  
+  console.log(`Chat ID: ${chatId}`);
+  
+   // Optionally, you can stop polling after getting the chatId
+  bot.stopPolling();
+ });
+
 ```
 
 3. After getting the chat ID, comment the code back.
@@ -143,8 +171,17 @@ INFLUXDB_BUCKET=ethereum_deposits
 
 Your final `.env` in the `/backend` folder should look like this:
 
-```bash
-# Example .env file
+```
+ALCHEMY_API_KEY=your_alchemykey
+BEACON_CONTRACT_ADDRESS=0x00000000219ab540356cBB839Cbe05303d7705Fa
+INFLUXDB_URL=http://localhost:8086
+INFLUXDB_TOKEN=Admin_user_token
+INFLUXDB_ORG=ethereum_org
+INFLUXDB_BUCKET=ethereum_deposits
+TELEGRAM_BOT_TOKEN=token_from_BotFather
+TELEGRAM_CHAT_ID=chat_id
+
+
 ```
 
 ## 5. Run the Application
@@ -153,20 +190,20 @@ Open 3 terminals in the `/backend` folder and run the following commands:
 
 - **Terminal 1:**
 
-```bash
-# Command for Terminal 1
+```
+node index.js
 ```
 
 - **Terminal 2:**
 
-```bash
-# Command for Terminal 2
+```
+node influxdb_worker.js
 ```
 
 - **Terminal 3:**
 
-```bash
-# Command for Terminal 3
+```
+node telegram_worker.js
 ```
 
 ## 6. Check Logs
@@ -177,20 +214,27 @@ You can also check the logs in the `logs/` folder.
 
 - **Terminal 1:**
 
-```bash
-# Example output for Terminal 1
+```
+PS D:\eth-deposit-tracker\backend> node index.js
+{"level":"info","message":"Server is running on port 3030","timestamp":"2024-09-10T12:57:18.692Z"}
+{"level":"info","message":"Connected to RabbitMQ","timestamp":"2024-09-10T12:57:18.798Z"}
+{"level":"info","message":"Latest block number: 20720358","timestamp":"2024-09-10T12:57:25.495Z"}
+{"level":"info","message":"New block detected: 20720358","timestamp":"2024-09-10T12:57:25.498Z"}
+{"level":"info","message":"New block detected: 20720359","timestamp":"2024-09-10T12:57:39.307Z"}
 ```
 
 - **Terminal 2:**
 
-```bash
-# Example output for Terminal 2
+```
+ D:\eth-deposit-tracker\backend> node influxdb_worker.js
+{"level":"info","message":"InfluxDB worker is waiting for messages","timestamp":"2024-09-10T12:56:44.169Z"}
 ```
 
 - **Terminal 3:**
 
-```bash
-# Example output for Terminal 3
+```
+PS D:\eth-deposit-tracker\backend> node telegram_worker.js
+{"level":"info","message":"Telegram worker is waiting for messages","timestamp":"2024-09-10T12:56:13.637Z"}
 ```
 
 ---
@@ -207,6 +251,8 @@ To view the Grafana dashboard:
 1. Open a web browser and go to `http://localhost:3000`
 2. Log in with your Grafana credentials
 3. Navigate to the Ethereum Deposit Tracker dashboard
+4. Create dashboards and check desired data insights
+   
 
 ## Configuration
 
