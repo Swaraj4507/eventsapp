@@ -284,8 +284,7 @@ Go through this if required[https://youtu.be/Jszd7zrl-_U?si=WQhMbHZXDj5OaBgA]
 
 Now your InfluxDB data source is set up in Grafana!
 
-### Screenshots
-*(Insert screenshots here)*
+
 
 
 ## Usage
