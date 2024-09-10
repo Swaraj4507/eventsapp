@@ -330,8 +330,10 @@ Log in with the credentials (default: guest/guest)
 Check if the queues influxdb_queue and telegram_queue exist
 
 # Check logs for a specific service
+```
 docker-compose logs influxdb_worker
 docker-compose logs telegram_worker
+```
 
 
 
