@@ -53,7 +53,7 @@ git clone "https://github.com/Swaraj4507/eth-deposit-tracker"
 
 Navigate to the `grafana_influxdb` folder in your project directory and run the following command:
 
-```bash
+```
 docker-compose up -d
 
 ```
@@ -97,7 +97,12 @@ This command will output JSON data that includes details about the network, incl
 **Note:** Make sure virtualization is enabled on your machine to run Docker Engine.
 
 ## 3. Run Docker Compose for RabbitMQ
+Navigate to the `rabbitmq` folder in your project directory and run the following command:
 
+```
+docker-compose up -d
+
+```
 You should be able to see RabbitMQ UI at [http://localhost:15672/](http://localhost:15672/)
 
 - Login with the credentials:
