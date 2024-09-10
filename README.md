@@ -13,7 +13,7 @@ graph TD
     C -->|InfluxDB Queue| D[InfluxDB Worker]
     C -->|Telegram Queue| E[Telegram Worker]
     D -->|Write Data| F[InfluxDB]
-    F -->|Query Data| G[Grafana]
+    G -->[Grafana] F|Query Data| 
     E -->|Send Notifications| H[Telegram Bot]
 ```
 
